@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+source .env
+
+fn_help(){
+    echo "jhub: Script to manage docker-composed jupyterhub setup"
+    echo "-----"
+    echo "USAGE: ./jhub [FLAGS]"
+    echo "FLAGS: "
+    echo "       -c | --clean: Stop and remove running containers. Remove JupyterHub data volume."
+    echo "       -b | --build: Build images without using cache"
+    echo "       -u | --up: Start containers in background. Always build images."
+    echo "       -d | --down: Stop containers."
+
+}
+
+fn_clean(){
+    # Stop containers
+    docker-compose down
+
+    # Remove containers
+    docker-compose rm
+
+    # Remove hub data volume.
+    # This is necessary when you make changes to jupyterhub_config.py
+    docker volume rm ${COMPOSE_PROJECT_NAME}_jupyterhub_data
+}
+
+fn_up(){
+    docker-compose up -d --build
+}
+
+fn_down(){
+    docker-compose down
+}
+
+fn_build(){
+
+    docker-compose build --no-cache --pull
+
+}
+
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -c|--clean)
+            fn_clean
+            shift
+            ;;
+        -b|--build)
+            fn_build
+            shift
+            ;;
+        -d|--down)
+            fn_down
+            shift # past value
+            ;;
+        -u|--up)
+            fn_up
+            shift # past value
+            ;;
+        -h|--help)
+            fn_help
+            shift # past value
+            ;;
+        *)    # unknown option
+            POSITIONAL+=("$1") # save it in an array for later
+            shift # past argument
+            ;;
+    esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters

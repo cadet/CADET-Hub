@@ -1,0 +1,41 @@
+version: '3'
+services:
+
+  # TODO: Update to v2
+  # LINK: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
+  reverse-proxy:
+    image: traefik:v1.7.16
+    container_name: reverse-proxy   # The service will use this container name.
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./reverse-proxy/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - ./certs:/etc/certs
+    restart: on-failure
+
+  jupyterhub:
+    build: jupyterhub                # Build the container from this folder.
+    container_name: jupyterhub_hub   # The service will use this container name.
+    volumes:                         # Give access to Docker socket.
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jupyterhub_data:/srv/jupyterhub
+    environment:                     # Env variables passed to the Hub process.
+      DOCKER_JUPYTER_IMAGE: jupyterlab_img
+      DOCKER_NETWORK_NAME: ${COMPOSE_PROJECT_NAME}_default
+      HUB_IP: jupyterhub_hub
+    labels:                          # Traefik configuration.
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:${HOST}"
+    restart: on-failure
+
+  jupyterlab:
+    build: jupyterlab
+    image: jupyterlab_img
+    container_name: jupyterlab-throwaway
+    command: echo
+
+volumes:
+  jupyterhub_data:
