@@ -6,9 +6,9 @@ from jupyterhub.auth import DummyAuthenticator
 c.JupyterHub.admin_access = True
 c.Spawner.default_url = '/lab'
 
-c.JupyterHub.authenticator_class = DummyAuthenticator
-c.DummyAuthenticator.password = "pass"
 c.Authenticator.admin_users = { 'admin' }
+
+c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
 
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 

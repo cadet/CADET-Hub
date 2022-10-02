@@ -21,7 +21,7 @@ services:
     container_name: jupyterhub_hub   # The service will use this container name.
     volumes:                         # Give access to Docker socket.
       - /var/run/docker.sock:/var/run/docker.sock
-      - jupyterhub_data:/srv/jupyterhub
+      - ./jupyterhub_data:/srv/jupyterhub
     environment:                     # Env variables passed to the Hub process.
       DOCKER_JUPYTER_IMAGE: jupyterlab_img
       DOCKER_NETWORK_NAME: ${COMPOSE_PROJECT_NAME}_default
@@ -36,6 +36,3 @@ services:
     image: jupyterlab_img
     container_name: jupyterlab-throwaway
     command: echo
-
-volumes:
-  jupyterhub_data:

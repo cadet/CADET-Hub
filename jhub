@@ -7,23 +7,32 @@ fn_help(){
     echo "-----"
     echo "USAGE: ./jhub [FLAGS]"
     echo "FLAGS: "
-    echo "       -c | --clean: Stop and remove running containers. Remove JupyterHub data volume."
+    echo "       --nuke-user-data: Remove all user data."
     echo "       -b | --build: Build images without using cache"
     echo "       -u | --up: Start containers in background. Always build images."
     echo "       -d | --down: Stop containers."
 
 }
 
-fn_clean(){
-    # Stop containers
-    docker-compose down
+# Color handling
+function fg () { echo -ne "\\033[0;$1m"; }
+function fgx () { echo -ne "\\033[38;5;$1m"; }
+function c () { echo -ne "\\033[$1m"; }
 
-    # Remove containers
-    docker-compose rm
+fn_nuke_user_data(){
 
-    # Remove hub data volume.
-    # This is necessary when you make changes to jupyterhub_config.py
-    docker volume rm ${COMPOSE_PROJECT_NAME}_jupyterhub_data
+    fg 1        # Style Bold
+    fgx 1       # Color Red
+    echo "Are you sure you want to NUKE USER DATA?"
+    c 0         # Color End
+    read -rep "continue? [y/any]: " -i "n" okay
+    [ "$okay" != 'y' ] && exit
+
+    USER_VOLUMES=$(docker volume ls -q -f "name=jupyterhub-user-")
+
+    [ -z "$USER_VOLUMES" ] && echo "No user volumes found!" && exit
+
+    docker volume rm $USER_VOLUMES
 }
 
 fn_up(){
@@ -46,8 +55,8 @@ while [[ $# -gt 0 ]]
 do
     key="$1"
     case $key in
-        -c|--clean)
-            fn_clean
+        --nuke-user-data)
+            fn_nuke_user_data
             shift
             ;;
         -b|--build)
