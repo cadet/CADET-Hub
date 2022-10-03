@@ -7,7 +7,9 @@ fn_help(){
     echo "-----"
     echo "USAGE: ./jhub [FLAGS]"
     echo "FLAGS: "
-    echo "       --nuke-user-data: Remove all user data."
+    echo "       --nuke-user-data: Remove all user data volumes."
+    echo "       --backup-user-data: Backup all user data from home folder."
+    echo "       --restore-user-data: Restore all user data from home folder."
     echo "       -b | --build: Build images without using cache"
     echo "       -u | --up: Start containers in background. Always build images."
     echo "       -d | --down: Stop containers."
@@ -35,6 +37,33 @@ fn_nuke_user_data(){
     docker volume rm $USER_VOLUMES
 }
 
+fn_backup_user_data(){
+
+    USER_VOLUMES=$(docker volume ls -q -f "name=jupyterhub-user-")
+    [ -z "$USER_VOLUMES" ] && echo "No user volumes found!" && exit
+
+    for vol in $USER_VOLUMES; do
+        echo "Backing up $vol"
+
+        docker run -it --rm -v $vol:/home/jovyan -v $(pwd)/backup:/backup ubuntu tar cf /backup/$vol.tar /home/jovyan
+    done
+
+}
+
+fn_restore_user_data(){
+
+    USER_ARCHIVES=$(ls backup/*.tar)
+
+    for arc in $USER_ARCHIVES; do
+        echo "Restoring $arc"
+        BASENAME="$(basename $arc)"
+        FILENAME_NOEXT=${BASENAME%%.*} 
+
+        docker run --rm -v $FILENAME_NOEXT:/home/jovyan -v $(pwd)/backup:/backup ubuntu bash -c "cd /home/jovyan && tar xf /backup/$BASENAME --strip 2"
+    done
+
+}
+
 fn_up(){
     docker-compose up -d --build
 }
@@ -57,6 +86,14 @@ do
     case $key in
         --nuke-user-data)
             fn_nuke_user_data
+            shift
+            ;;
+        --backup-user-data)
+            fn_backup_user_data
+            shift
+            ;;
+        --restore-user-data)
+            fn_restore_user_data
             shift
             ;;
         -b|--build)
