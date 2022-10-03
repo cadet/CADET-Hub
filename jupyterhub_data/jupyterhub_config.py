@@ -6,7 +6,8 @@ from jupyterhub.auth import DummyAuthenticator
 c.JupyterHub.admin_access = True
 c.Spawner.default_url = '/lab'
 
-c.Authenticator.admin_users = { 'admin' }
+c.Authenticator.allowed_users = { 'rao', 'test' }
+c.Authenticator.admin_users = { 'rao' }
 
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
 
