@@ -19,7 +19,6 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.JupyterHub.hub_ip          = os.environ['HUB_IP']
 c.DockerSpawner.image        = os.environ['DOCKER_JUPYTER_IMAGE']
 c.DockerSpawner.network_name = os.environ['DOCKER_NETWORK_NAME']
-c.DockerSpawner.extra_create_kwargs = {'user': 'root'}
 
 # Delete containers when servers are stopped.
 c.DockerSpawner.remove = True
