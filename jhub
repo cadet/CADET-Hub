@@ -29,10 +29,12 @@ fn_nuke_user_data(){
     fgx 1       # Color Red
     echo "Are you sure you want to NUKE USER DATA?"
     c 0         # Color End
-    read -rep "continue? [y/any]: " -i "n" okay
-    [ "$okay" != 'y' ] && exit
 
     USER_VOLUMES=$(docker volume ls -q -f "name=jupyterhub-user-")
+    echo -e "$USER_VOLUMES"
+
+    read -rep "continue? [y/any]: " -i "n" okay
+    [ "$okay" != 'y' ] && exit
 
     [ -z "$USER_VOLUMES" ] && echo "No user volumes found!" && exit
 
