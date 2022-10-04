@@ -11,6 +11,9 @@ c.Authenticator.admin_users = { 'rao' }
 
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
 
+c.Spawner.mem_limit = '10G'
+c.Spawner.cpu_limit = 1
+
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 c.JupyterHub.hub_ip          = os.environ['HUB_IP']
