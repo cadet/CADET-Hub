@@ -67,16 +67,16 @@ fn_restore_user_data(){
 }
 
 fn_up(){
-    docker-compose up -d --build
+    docker compose up -d --build
 }
 
 fn_down(){
-    docker-compose down
+    docker compose down
 }
 
 fn_build(){
 
-    docker-compose build --no-cache --pull
+    docker compose build --no-cache --pull
 
 }
 
