@@ -4,8 +4,6 @@
 scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 cd $scriptDir
 
-source .env
-
 fn_help(){
     echo "jhub: Script to manage docker-composed jupyterhub setup"
     echo "-----"
