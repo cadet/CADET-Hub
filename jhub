@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Can be called from anywhere, but executes in the scriptDir
+scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+cd $scriptDir
+
 source .env
 
 fn_help(){
