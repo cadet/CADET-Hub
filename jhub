@@ -9,12 +9,12 @@ fn_help(){
     echo "-----"
     echo "USAGE: ./jhub [FLAGS]"
     echo "FLAGS: "
-    echo "       --nuke-user-data: Remove all user data volumes."
-    echo "       --backup-user-data: Backup all user data from home folder."
-    echo "       --restore-user-data: Restore all user data from home folder."
     echo "       -b | --build: Build images without using cache"
     echo "       -u | --up: Start containers in background. Always build images."
     echo "       -d | --down: Stop containers."
+    echo "       --nuke-user-data: Remove all user data volumes."
+    echo "       --backup-user-data: Backup all user data from home folder."
+    echo "       --restore-user-data: Restore all user data from home folder."
 
 }
 
