@@ -1,0 +1,4 @@
+jupyterhub_data/passwords.dbm.db
+jupyterhub_data/jupyterhub.sqlite
+jupyterhub_data/jupyterhub-proxy.pid
+jupyterhub_data/jupyterhub_cookie_secret
