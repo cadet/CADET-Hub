@@ -10,6 +10,7 @@ c.Authenticator.allowed_users = { 'rao', 'test' }
 c.Authenticator.admin_users = { 'rao' }
 
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
+# c.JupyterHub.authenticator_class = DummyAuthenticator
 
 c.Spawner.mem_limit = '10G'
 c.Spawner.cpu_limit = 1
@@ -18,6 +19,11 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 c.JupyterHub.hub_ip          = os.environ['HUB_IP']
 c.DockerSpawner.image        = os.environ['DOCKER_JUPYTER_IMAGE']
+# c.DockerSpawner.image_whitelist        = { 
+#                                           'CADET-4.3.0': 'cadetlab_img', 
+#                                           'Minimal': 'jupyter/minimal-notebook',
+#                                           'Base': 'jupyter/base-notebook'
+#                                           }
 c.DockerSpawner.network_name = os.environ['DOCKER_NETWORK_NAME']
 
 # Delete containers when servers are stopped.
