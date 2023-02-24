@@ -28,3 +28,13 @@ c.SwarmSpawner.images = [
     {"image": "ucphhpc/base-notebook:latest", "name": "Python Notebook"},
     {"image": "cadet-test", "name": "Cadet Notebook"}
 ]
+
+# add user data volume
+mounts = [{'type' : 'volume',
+        'source' : 'cadethub-user-{username}',
+        'target' : '/home/jovyan/work',}]
+
+# mount user data volume by default in all containers
+c.SwarmSpawner.container_spec = {
+    "mounts": mounts,
+}
