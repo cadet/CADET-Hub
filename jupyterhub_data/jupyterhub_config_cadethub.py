@@ -24,9 +24,18 @@ c.SwarmSpawner.use_user_options = True
 # always stop spawned server to prevent ghost servers
 c.JupyterHub.cleanup_servers = True
 
+# overwriting resource specs for cadet
+resource_spec_cadet = {
+                'cpu_limit' : int(1 * 1e9), # (int) – CPU limit in units of 10^9 CPU shares.
+                'mem_limit' : int(2048 * 1e6), # (int) – Memory limit in Bytes.
+                'cpu_reservation' : int(1 * 1e9), # (int) – CPU reservation in units of 10^9 CPU shares.
+                'mem_reservation' : int(512 * 1e6), # (int) – Memory reservation in Bytes
+                }
+
 c.SwarmSpawner.images = [
     {"image": "ucphhpc/base-notebook:latest", "name": "Python Notebook"},
-    {"image": "cadet-test", "name": "Cadet Notebook"}
+    {"image": "cadet-test", "name": "Cadet Notebook",
+    "resource_spec": resource_spec_cadet}
 ]
 
 # add user data volume
@@ -38,3 +47,11 @@ mounts = [{'type' : 'volume',
 c.SwarmSpawner.container_spec = {
     "mounts": mounts,
 }
+
+# default resource specs (can be overwritten by custom image specs)
+c.SwarmSpawner.resource_spec = {
+                'cpu_limit' : int(1 * 1e9), # (int) – CPU limit in units of 10^9 CPU shares.
+                'mem_limit' : int(512 * 1e6), # (int) – Memory limit in Bytes.
+                'cpu_reservation' : int(1 * 1e9), # (int) – CPU reservation in units of 10^9 CPU shares.
+                'mem_reservation' : int(512 * 1e6), # (int) – Memory reservation in Bytes
+                }
