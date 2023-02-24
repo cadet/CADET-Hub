@@ -21,6 +21,9 @@ c.SwarmSpawner.networks = ["cadethub_default"]
 
 c.SwarmSpawner.use_user_options = True
 
+# always stop spawned server to prevent ghost servers
+c.JupyterHub.cleanup_servers = True
+
 c.SwarmSpawner.images = [
     {"image": "ucphhpc/base-notebook:latest", "name": "Python Notebook"},
     {"image": "cadet-test", "name": "Cadet Notebook"}
