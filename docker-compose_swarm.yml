@@ -5,7 +5,7 @@ version: '3.7'
 
 services:
   jupyterhub:
-    image: ucphhpc/jhub-swarmspawner:edge
+    image: swarmspawner:3.1.1 # build from Dockerfile here https://github.com/ucphhpc/SwarmSpawner
     container_name: jupyterhub
     ports:
       - "8888:8000/tcp"
