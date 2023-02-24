@@ -25,6 +25,7 @@ c.SwarmSpawner.use_user_options = True
 c.JupyterHub.cleanup_servers = True
 
 # overwriting resource specs for cadet
+# Note: when the memory limit is reached the process will use the swap
 resource_spec_cadet = {
                 'cpu_limit' : int(1 * 1e9), # (int) – CPU limit in units of 10^9 CPU shares.
                 'mem_limit' : int(2048 * 1e6), # (int) – Memory limit in Bytes.
