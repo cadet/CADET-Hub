@@ -5,8 +5,11 @@ c = get_config()
 
 c.JupyterHub.spawner_class = "jhub.SwarmSpawner"
 
-c.JupyterHub.authenticator_class = "jhubauthenticators.DummyAuthenticator"
-c.DummyAuthenticator.password = "password"
+#c.JupyterHub.authenticator_class = "jhubauthenticators.DummyAuthenticator"
+c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
+#c.DummyAuthenticator.password = "password"
+
+#c.Authenticator.admin_users = { 'admin' }
 
 c.JupyterHub.ip = "0.0.0.0"
 c.JupyterHub.hub_ip = "0.0.0.0"
