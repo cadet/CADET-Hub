@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  # # TODO: Update to v2
+  # # LINK: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
+  # reverse-proxy:
+  #   image: traefik:v1.7.16
+  #   container_name: reverse-proxy   # The service will use this container name.
+  #   ports:
+  #     - "8081:8000"
+  #     - "443:443"
+  #     - "8083:8080"
+  #   volumes:
+  #     - ./reverse-proxy/traefik.toml:/etc/traefik/traefik.toml
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ./certs:/etc/certs
+  #   restart: on-failure
+
+  jupyterhub:
+    build: jupyterhub                # Build the container from this folder.
+    #container_name: jupyterhub_hub   # The service will use this container name.
+    image: 127.0.0.1:5000/jupyterhub:latest
+    volumes:                         # Give access to Docker socket.
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/IBT/seiffarth/projects/cadethub/jupyterhub_data:/srv/jupyterhub
+    environment:                     # Env variables passed to the Hub process.
+      DOCKER_JUPYTER_IMAGE: jupyterlab_img
+      DOCKER_NETWORK_NAME: ${COMPOSE_PROJECT_NAME}_jupyter
+      #${COMPOSE_PROJECT_NAME}_default
+      HUB_IP: jupyterhub
+    # labels:                          # Traefik configuration.
+    #   - "traefik.enable=true"
+    #   - "traefik.frontend.rule=Host:${HOST}"
+    ports:
+      - "8800:8000"
+    restart: on-failure
+    networks:
+      - jupyter
+    deploy:
+      placement: 
+        constraints: 
+          - node.role == manager
+
+  jupyterlab:
+    build: jupyterlab
+    #image: jupyterlab_img
+    image: 127.0.0.1:5000/jupyterlab_img:latest
+    container_name: jupyterlab-throwaway
+    command: echo
+
+networks:
+  jupyter:

@@ -1,40 +1,22 @@
-version: '3'
+version: '3.7'
+
+# Before jupyterhub spawner can launch anything,
+# the host needs to be a docker swarm manager
+
 services:
-
-  # # TODO: Update to v2
-  # # LINK: https://kevinquillen.com/setting-traefik-2-local-ssl-certificate
-  # reverse-proxy:
-  #   image: traefik:v1.7.16
-  #   container_name: reverse-proxy   # The service will use this container name.
-  #   ports:
-  #     - "8081:8000"
-  #     - "443:443"
-  #     - "8083:8080"
-  #   volumes:
-  #     - ./reverse-proxy/traefik.toml:/etc/traefik/traefik.toml
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - ./certs:/etc/certs
-  #   restart: on-failure
-
   jupyterhub:
-    build: jupyterhub                # Build the container from this folder.
-    container_name: jupyterhub_hub   # The service will use this container name.
-    volumes:                         # Give access to Docker socket.
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./jupyterhub_data:/srv/jupyterhub
-    environment:                     # Env variables passed to the Hub process.
-      DOCKER_JUPYTER_IMAGE: jupyterlab_img
-      DOCKER_NETWORK_NAME: ${COMPOSE_PROJECT_NAME}_default
-      HUB_IP: jupyterhub_hub
-    # labels:                          # Traefik configuration.
-    #   - "traefik.enable=true"
-    #   - "traefik.frontend.rule=Host:${HOST}"
+    build: jupyterhub
+    #image: 127.0.0.1:5000/swarmspawner-custom:3.1.1 # build from Dockerfile here https://github.com/ucphhpc/SwarmSpawner
+    image: swarmspawner:3.1.1
+    container_name: jupyterhub
     ports:
-      - "8081:8000"
-    restart: on-failure
+      - "8888:8000/tcp"
+    volumes:
+      - ./jupyterhub_data/jupyterhub_config_cadethub.py:/srv/jupyterhub/jupyter_config.py:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    command: jupyterhub -f /srv/jupyterhub/jupyter_config.py
 
-  jupyterlab:
-    build: jupyterlab
-    image: jupyterlab_img
-    container_name: jupyterlab-throwaway
-    command: echo
+networks:
+  default:
+    name: cadethub_default
+    driver: overlay
