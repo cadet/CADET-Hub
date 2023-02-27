@@ -56,3 +56,17 @@ c.SwarmSpawner.resource_spec = {
                 'cpu_reservation' : int(1 * 1e9), # (int) – CPU reservation in units of 10^9 CPU shares.
                 'mem_reservation' : int(512 * 1e6), # (int) – Memory reservation in Bytes
                 }
+
+
+# Simple method to generate a uid for the user
+def simple_user_id(spawner):
+    user = spawner.user
+    spawner.log.error("Spawning for user {}".format(user))
+    spawner.log.error("Spawning for user {}".format(user.name))
+
+    # IMPORTANT: is needed for the volumes where we access the {username} variable
+    spawner.username = user.name
+
+    
+
+c.SwarmSpawner.pre_spawn_hook = simple_user_id
