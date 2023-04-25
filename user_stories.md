@@ -8,6 +8,7 @@ Constraints:
 1) Die Jupyterhubs sollten auf unseren eigenen Clusterknoten laufen (Damit können wir agiler rechnen, ohne dass wir Anträge stellen müssten)
 2) Es müssen eigene Python-Kernel, die sich oft ändern können, zur Verfügung stehen
 3) Der JupyterSpawner sollte auch vordefinierte Docker Images (gebaut in CI pipelines, gehostet in einer privaten container registry), die sich oft ändern können. (Debug-Versionen, Pre-Release oder Develop-branches)
+4) Nutzer sind sowohl Interne (also im FZJ LDAP), als auch Externe (Workshopteilnehmer, Kollaborationsparter (Forschungs + Industrie))
 
 
 Über das user management wollen wir abbilden können, wer auf welche unserer Compute-Nodes zugreifen kann
