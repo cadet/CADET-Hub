@@ -1,6 +1,5 @@
 # Do not forget to pin down the version
-FROM jupyterhub/jupyterhub:3.0.0
-
+FROM jupyterhub/jupyterhub:4.0
 # Install dependencies (for advanced authentication and spawning)
 RUN pip install \
     dockerspawner==12.1.0 \
