@@ -64,7 +64,7 @@ c.JupyterHub.load_roles = [
     },
 ]
 
-projects_yaml = Path(__file__).parent.resolve().joinpah("projects.yaml")
+projects_yaml = Path(__file__).parent.resolve().joinpath("projects.yaml")
 with projects_yaml.open() as f:
     project_config = yaml.safe_load(f)
 
@@ -73,6 +73,9 @@ for project_name, project in project_config["projects"].items():
     print(f"Adding project {project_name} with members {members}")
     c.JupyterHub.load_groups[project_name] = members
     collab_user = f"{project_name}-collab"
+    c.Authenticator.allowed_users.append(
+        {"collab_user"}
+    )
     c.JupyterHub.load_groups["collaborative"].append(collab_user)
     c.JupyterHub.load_roles.append(
         {
