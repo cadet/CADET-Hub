@@ -31,7 +31,7 @@ services:
     #   - "traefik.frontend.rule=Host:${HOST}"
     ports:
       - "8082:8000"
-    restart: on-failure
+    #restart: on-failure
 
   jupyterlab:
     build: jupyterlab

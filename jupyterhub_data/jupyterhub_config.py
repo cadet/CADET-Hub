@@ -1,13 +1,17 @@
 import os
 import sys
+import yaml
 from jupyterhub.auth import DummyAuthenticator
+from pathlib import Path
+
+c = get_config()
 
 ## Generic
 c.JupyterHub.admin_access = True
 c.Spawner.default_url = '/lab'
 
-c.Authenticator.allowed_users = { 'rao', 'test' }
-c.Authenticator.admin_users = { 'rao' }
+c.Authenticator.allowed_users = { 'rao', 'siska', 'test', 'lion', 'seal'}
+c.Authenticator.admin_users = { 'rao', 'siska' }
 
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
 # c.JupyterHub.authenticator_class = DummyAuthenticator
@@ -40,6 +44,10 @@ c.DockerSpawner.notebook_dir = NOTEBOOK_DIR
 # # notebook directory in the container
 c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': NOTEBOOK_DIR }
 
+c.JupyterHub.load_groups ={
+    # collaborative accounts
+    "collaborative": [],
+}
 
 c.JupyterHub.load_roles = [
     {
@@ -53,8 +61,31 @@ c.JupyterHub.load_roles = [
         ],
         # assignment of role's permissions to:
         "services": ["jupyterhub-idle-culler-service"],
-    }
+    },
 ]
+
+projects_yaml = Path(__file__).parent.resolve().joinpah("projects.yaml")
+with projects_yaml.open() as f:
+    project_config = yaml.safe_load(f)
+
+for project_name, project in project_config["projects"].items():
+    members = project.get("members", [])
+    print(f"Adding project {project_name} with members {members}")
+    c.JupyterHub.load_groups[project_name] = members
+    collab_user = f"{project_name}-collab"
+    c.JupyterHub.load_groups["collaborative"].append(collab_user)
+    c.JupyterHub.load_roles.append(
+        {
+            "name": f"collab-access-{project_name}",
+            "scopes": [
+                "admin-ui",
+                f"admin:servers!user={collab_user}",
+                f"list:users!user={collab_user}",
+                f"access:servers!user={collab_user}",
+            ],
+            "groups": [project_name],
+        }
+    )
 
 c.JupyterHub.services = [
     {
@@ -67,3 +98,12 @@ c.JupyterHub.services = [
         # "admin": True,
     }
 ]
+
+def pre_spawn_hook(spawner):
+    group_names = {group.name for group in spawner.user.groups}
+    if "collaborative" in group_names:
+        spawner.log.info(f"Enabling RTC for user {spawner.user.name}")
+        spawner.args.append("--LabApp.collaborative=True")
+
+
+c.Spawner.pre_spawn_hook = pre_spawn_hook
