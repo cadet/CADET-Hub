@@ -32,7 +32,7 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${planalyze_env}" python=${
 
 # create Python kernel and link it to jupyter
 # NOTE: Contrary to popular instruction, we do not install it as --user since we use containers and our home directory is a docker volume.
-USER root 
+USER root
 RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/python" -m ipykernel install --name="${planalyze_env}" --display-name="${planalyze_env}" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
