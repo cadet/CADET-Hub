@@ -10,7 +10,7 @@ c = get_config()
 c.JupyterHub.admin_access = True
 c.Spawner.default_url = '/lab'
 
-c.Authenticator.allowed_users = { 'rao', 'siska', 'test', 'lion', 'seal'}
+c.Authenticator.allowed_users = { 'rao', 'siska', 'test', 'lion', 'seal' }
 c.Authenticator.admin_users = { 'rao', 'siska' }
 
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
@@ -73,8 +73,8 @@ for project_name, project in project_config["projects"].items():
     print(f"Adding project {project_name} with members {members}")
     c.JupyterHub.load_groups[project_name] = members
     collab_user = f"{project_name}-collab"
-    c.Authenticator.allowed_users.append(
-        {"collab_user"}
+    c.Authenticator.allowed_users.add(
+        f"{collab_user}"
     )
     c.JupyterHub.load_groups["collaborative"].append(collab_user)
     c.JupyterHub.load_roles.append(
