@@ -1,0 +1,19 @@
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.run]
+omit = [
+    # exclude tests files from coverage calculation
+    "**/test*.py"
+]
+
+[tool.ruff]
+line-length = 140
+ignore-init-module-imports = true
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
