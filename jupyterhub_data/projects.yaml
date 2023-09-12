@@ -1,5 +1,25 @@
 projects:
+  admin:
+    members:
+      - rao
+      - schmoelder
+      - siska
+  ibg-1:
+    members:
+      - siska
+      - schmoelder
+      - rao
+      - steier
+  field-trip-colab:
+    members:
+      - lion
+      - seal
+      - siska
+      - steier
   zoo:
     members:
       - lion
       - seal
+  dummy:
+    members:
+      - test
