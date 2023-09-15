@@ -10,9 +10,6 @@ c = get_config()  # type: ignore  # noqa
 c.JupyterHub.admin_access = True
 c.Spawner.default_url = "/lab"
 
-c.Authenticator.allowed_users = {"rao", "siska", "test", "lion", "seal"}
-c.Authenticator.admin_users = {"rao", "siska"}
-
 c.JupyterHub.authenticator_class = "firstuseauthenticator.FirstUseAuthenticator"
 
 c.Spawner.mem_limit = "10G"
@@ -66,26 +63,35 @@ c.JupyterHub.load_roles = [
 projects_yaml = Path(__file__).parent.resolve().joinpath("projects.yaml")
 with projects_yaml.open() as f:
     project_config = yaml.safe_load(f)
+print("Loading users and groups from yaml file.")
+
+admin_users = project_config["projects"]["admin"]["members"]
+c.Authenticator.admin_users.update(admin_users)
+print("Add users with admin privilege.")
 
 for project_name, project in project_config["projects"].items():
     members = project.get("members", [])
-    print(f"Adding project {project_name} with members {members}")
+    c.Authenticator.allowed_users.update(members)
+    print(f"Adding {project_name} members: {members} to the list to allowed users.")
     c.JupyterHub.load_groups[project_name] = members
-    collab_user = f"{project_name}-collab"
-    c.Authenticator.allowed_users.add(f"{collab_user}")
-    c.JupyterHub.load_groups["collaborative"].append(collab_user)
-    c.JupyterHub.load_roles.append(
-        {
-            "name": f"collab-access-{project_name}",
-            "scopes": [
-                "admin-ui",
-                f"admin:servers!user={collab_user}",
-                f"list:users!user={collab_user}",
-                f"access:servers!user={collab_user}",
-            ],
-            "groups": [project_name],
-        }
-    )
+    print(f"Create group {project_name} and assign {members}")
+    if project_name.endswith(("collab", "collaboration")):
+        collab_user = f"{project_name}-user"
+        c.Authenticator.allowed_users.add(collab_user)
+        print(f"Adding a RTC user for project {project_name} to the list of allowed users.")
+        c.JupyterHub.load_groups["collaborative"].append(collab_user)
+        c.JupyterHub.load_roles.append(
+            {
+                "name": f"rtc-{project_name}",
+                "scopes": [
+                    "admin-ui",
+                    f"admin:servers!user={collab_user}",
+                    f"list:users!user={collab_user}",
+                    f"access:servers!user={collab_user}",
+                ],
+                "groups": [project_name],
+            }
+        )
 
 c.JupyterHub.services = [
     {
