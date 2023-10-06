@@ -2,6 +2,8 @@ FROM jupyter/scipy-notebook:hub-3.0.0
 
 RUN rm -rf ${HOME}/work
 
+RUN conda install -c conda-forge "jupyterlab<4" jupyterlab-git
+
 ##################
 # CADET KERNEL
 ##################
