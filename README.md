@@ -13,15 +13,31 @@ This is easily achieved by following these steps:
    ```
    sudu su jupyterhub
    ```
-3. Start or stop `jupyterhub_hub` container
+3. Start or stop `jupyterhub_hub` container with `jhub`
 
-### jhub
-The `jhub` script is just a convenience layer on top of docker-compose, with additional functionality. Run `./jhub -h` for further help.  
+## jhub
+The `jhub` script is just a convenience layer on top of docker-compose, with additional functionality. Run `./jhub --help` for further help.  
 
-To build and start our containers, run
+__To build and start our containers, run__
 ```
 ./jhub --up
 ```
+__If you want to build a new image without using cache, run__
+```
+./jhub --build
+```
+__To shut down JupyterHub (e.g., for maintenance, updates), run__
+```
+./jhub --down
+``` 
+__Additional available flags are__
+```
+--nuke-user-data # Remove all user data volumes
+--backup-user-data # Backup all user data from home folder
+--restore-user.data # Restore all user data from home folder
+```
+An abrupt alternative to `./jhub --down` is `docker kill jupyterhub_hub`.  
+After this command `./jhub --up` may blocked because the proxy is still running. To fix this, remove `jupyterhub_data/jupyterhub-proxy.pid`.
 
 # Configuring the settings
 __The current implementation of JupyterHub was adapted from [this opendreamkit blog post](https://opendreamkit.org/2018/10/17/jupyterhub-docker/).__ It is helpful; feel free to refer to it or the [JupyterHub documentation](https://jupyterhub.readthedocs.io/en/stable/tutorial/index.html) regarding all modification considerations.  
@@ -31,8 +47,11 @@ The hub and the user containers are separate. Dockerfiles in the directories `ju
 ## Configuring the Hub
 
 Configuring the hub involves modifying keys in `jupyterhub_data/jupyterhub_config.py`.  
-Primarily, we may be interested in the following
+Primarily, we may be interested in the following:
 ```
+# ATTENTION, ALLOWED_USERS & ADMINS ARE NO DEFINED IN A SEPARATE YAML FILE (jupyterhub_data/projects.yaml)
+# SEE ACCOUNTS & PERMISSIONS
+
 c.Authenticator.allowed_users    = { 'rao', 'test' }
 c.Authenticator.admin_users      = { 'rao' }
 c.JupyterHub.authenticator_class = 'firstuseauthenticator.FirstUseAuthenticator'
@@ -40,7 +59,7 @@ c.Spawner.mem_limit              = '10G'
 c.Spawner.cpu_limit              = 1
 ```
 #### Accounts & Permissions
-We opted to utilize a yaml file to maintain a more structed overview of users, group affiliations (important for real-time collaboration) and admin permissions. The respective `projects.yaml` file is located in the `jupyterhub_dat` directory.  
+We opted to utilize a yaml file to maintain a more structed overview of users, group affiliations (important for real-time collaboration) and admin permissions. The respective `projects.yaml` file is located in the `jupyterhub_data` directory.  
 
 The `projects.yaml` however, is not a single source of truth once the hub is deployed. Users with admin privileges may utilize the admin panel to add user accounts and manage group affiliations.  
 
@@ -84,6 +103,8 @@ To modify the notebook environments the users interact with, one must change the
 * Planalyze
 
 This Dockerfile example can be used as a template to generate further kernels and/or add additional dependecies.
+
+>__NOTE:__ It is best practise to pin the desired versions of the referenced packages in your Dockerfile. This way you will not be suprised by breaking changes!
 
 ```
 # name kernel/environment & choose python version
