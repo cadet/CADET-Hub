@@ -12,7 +12,7 @@ c.Spawner.default_url = "/lab"
 
 c.JupyterHub.authenticator_class = "firstuseauthenticator.FirstUseAuthenticator"
 
-c.Spawner.mem_limit = "32G"
+c.Spawner.mem_limit = "30G"
 c.Spawner.cpu_limit = 4
 
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
