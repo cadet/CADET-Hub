@@ -2,9 +2,13 @@ FROM jupyter/scipy-notebook:hub-3.0.0
 
 RUN rm -rf ${HOME}/work
 
-##################
-# CADET KERNEL
-##################
+RUN mamba install -c conda-forge "jupyterlab<4" jupyterlab-git jupyter-resource-usage ipywidgets ipykernel 
+RUN mamba install -c conda-forge "cadet=4.4.0"
+RUN pip install environment_kernels nbgitpuller
+
+#####################
+# CADET LATEST KERNEL
+#####################
 
 # name your environment and choose the python version
 ARG cadet_env=CADET
@@ -15,10 +19,8 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
     'ipython' \
     'ipykernel' \
     'nb_conda_kernels' \
-    'cadet' -c conda-forge && \
+    'cadet==4.4.0' -c conda-forge && \
     mamba clean --all -f -y
-
-RUN git clone https://github.com/modsim/CADET-Tutorial
 
 # alternatively, you can comment out the lines above and uncomment those below
 # if you'd prefer to use a YAML file present in the docker build context
@@ -36,9 +38,8 @@ RUN "${CONDA_DIR}/envs/${cadet_env}/bin/python" -m ipykernel install --name="${c
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 USER ${NB_UID}
-
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir \
-    'CADET-Process'
+ 
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir 'CADET-Process==0.7.3'
 
 ##################
 # PLANALYZE KERNEL
@@ -47,12 +48,15 @@ RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir \
 # name your environment and choose the python version
 ARG planalyze_env=Planalyze
 ARG planalyze_py_ver=3.11
-
+ 
 # you can add additional libraries you want mamba to install by listing them below the first line and ending with "&& \"
 RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${planalyze_env}" python=${planalyze_py_ver} \
     ipython \
     ipykernel \
-    nb_conda_kernels && \
+    nb_conda_kernels \
+    numpy \
+    matplotlib \
+    scikit-learn &&  \
     mamba clean --all -f -y
 
 
@@ -62,6 +66,8 @@ RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/python" -m ipykernel install --name=
     fix-permissions "/home/${NB_USER}"
 USER ${NB_UID}
 
+RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install calibr8
+ 
 # any additional pip installs can be added by uncommenting the following line
 # RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install --quiet --no-cache-dir
 

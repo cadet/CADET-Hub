@@ -12,8 +12,8 @@ c.Spawner.default_url = "/lab"
 
 c.JupyterHub.authenticator_class = "firstuseauthenticator.FirstUseAuthenticator"
 
-c.Spawner.mem_limit = "10G"
-c.Spawner.cpu_limit = 1
+c.Spawner.mem_limit = "32G"
+c.Spawner.cpu_limit = 4
 
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 
@@ -38,7 +38,7 @@ c.DockerSpawner.notebook_dir = NOTEBOOK_DIR
 
 # # Mount the real user's Docker volume on the host to the notebook user's
 # # notebook directory in the container
-c.DockerSpawner.volumes = {"jupyterhub-user-{username}": NOTEBOOK_DIR}
+c.DockerSpawner.volumes = {"jupyterhub-user-{username}": NOTEBOOK_DIR, "/opt/cadet/": {"bind": "/opt/cadet", "mode":"ro" }}
 
 c.JupyterHub.load_groups = {
     # collaborative accounts

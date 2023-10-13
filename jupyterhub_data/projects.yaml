@@ -1,25 +1,21 @@
 projects:
   admin:
     members:
-      - rao
-      - schmoelder
-      - siska
+      - j.schmoelder
+      - m.siska
+      - e.von.lieres
   ibg-1:
     members:
-      - siska
-      - schmoelder
-      - rao
-      - steier
-  field-trip-collab:
+      - m.siska
+      - j.schmoelder
+      - e.von.lieres
+      - j.seiffarth@fz-juelich.de
+      - b.stute@fz-jelich.de
+      - a.stratmann@fz-juelich.de
+      - j.breuer
+  cadet:
     members:
-      - lion
-      - seal
-      - siska
-      - steier
-  zoo:
-    members:
-      - lion
-      - seal
-  dummy:
-    members:
-      - test
+      - j.schmoelder
+      - e.von.lieres
+      - j.breuer
+      - s.leweke
