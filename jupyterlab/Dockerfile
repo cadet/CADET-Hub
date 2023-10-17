@@ -39,7 +39,7 @@ RUN "${CONDA_DIR}/envs/${cadet_env}/bin/python" -m ipykernel install --name="${c
     fix-permissions "/home/${NB_USER}"
 USER ${NB_UID}
  
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir 'CADET-Process==0.7.3'
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir 'CADET-Process==0.8.0'
 
 ##################
 # PLANALYZE KERNEL
