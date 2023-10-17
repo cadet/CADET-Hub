@@ -61,7 +61,7 @@ fn_restore_user_data(){
     for arc in $USER_ARCHIVES; do
         echo "Restoring $arc"
         BASENAME="$(basename $arc)"
-        FILENAME_NOEXT=${BASENAME%%.*} 
+        FILENAME_NOEXT=${BASENAME%%.*}
 
         docker run --rm -v $FILENAME_NOEXT:/home/jovyan -v $(pwd)/backup:/backup ubuntu bash -c "cd /home/jovyan && tar xf /backup/$BASENAME --strip 2"
     done
