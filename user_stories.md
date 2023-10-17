@@ -4,7 +4,7 @@
 3) Als Workshopleiter (cadet) möchte ich Workshopteilnehmern schnell Zugriff (eigene User-Verwaltung) auf eine definierte Compute Umgebung geben können, damit Beispiele gerechnet werden können, ohne dass vorher auf den Systemen der User software installiert/kompiliert werden muss.
 
 
-Constraints: 
+Constraints:
 1) Die Jupyterhubs sollten auf unseren eigenen Clusterknoten laufen (Damit können wir agiler rechnen, ohne dass wir Anträge stellen müssten)
 2) Es müssen eigene Python-Kernel, die sich oft ändern können, zur Verfügung stehen
 3) Der JupyterSpawner sollte auch vordefinierte Docker Images (gebaut in CI pipelines, gehostet in einer privaten container registry), die sich oft ändern können. (Debug-Versionen, Pre-Release oder Develop-branches)

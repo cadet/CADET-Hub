@@ -1,0 +1,21 @@
+projects:
+  admin:
+    members:
+      - j.schmoelder
+      - m.siska
+      - e.von.lieres
+  ibg-1:
+    members:
+      - m.siska
+      - j.schmoelder
+      - e.von.lieres
+      - j.seiffarth@fz-juelich.de
+      - b.stute@fz-jelich.de
+      - a.stratmann@fz-juelich.de
+      - j.breuer
+  cadet:
+    members:
+      - j.schmoelder
+      - e.von.lieres
+      - j.breuer
+      - s.leweke
