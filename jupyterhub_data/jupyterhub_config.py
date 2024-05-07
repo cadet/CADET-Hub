@@ -12,8 +12,8 @@ c.Spawner.default_url = "/lab"
 
 c.JupyterHub.authenticator_class = "firstuseauthenticator.FirstUseAuthenticator"
 
-c.Spawner.mem_limit = "30G"
-c.Spawner.cpu_limit = 4
+c.Spawner.mem_limit = "32G"
+c.Spawner.cpu_limit = 8
 
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 
@@ -100,7 +100,8 @@ c.JupyterHub.services = [
             sys.executable,
             "-m",
             "jupyterhub_idle_culler",
-            "--timeout=3600",
+            "--timeout=40000",
+
         ],
         # "admin": True,
     }
