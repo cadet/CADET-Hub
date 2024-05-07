@@ -12,7 +12,7 @@ RUN pip install environment_kernels nbgitpuller
 
 # name your environment and choose the python version
 ARG cadet_env=CADET
-ARG cadet_py_ver=3.10
+ARG cadet_py_ver=3.11
 
 # you can add additional libraries you want mamba to install by listing them below the first line and ending with "&& \"
 RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cadet_py_ver} \
@@ -38,8 +38,8 @@ RUN "${CONDA_DIR}/envs/${cadet_env}/bin/python" -m ipykernel install --name="${c
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 USER ${NB_UID}
-
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir 'CADET-Process==0.8.0'
+ 
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir 'CADET-Process==0.9.1'
 
 ##################
 # PLANALYZE KERNEL
@@ -56,7 +56,10 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${planalyze_env}" python=${
     nb_conda_kernels \
     numpy \
     matplotlib \
-    scikit-learn &&  \
+    seaborn \
+    pandas \
+    scikit-learn \
+    xarray -c conda-forge && \
     mamba clean --all -f -y
 
 
@@ -67,7 +70,7 @@ RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/python" -m ipykernel install --name=
 USER ${NB_UID}
 
 RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install calibr8
-
+ 
 # any additional pip installs can be added by uncommenting the following line
 # RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install --quiet --no-cache-dir
 
