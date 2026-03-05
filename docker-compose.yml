@@ -19,5 +19,4 @@ services:
     build: jupyterlab
     image: jupyterlab_img
     container_name: jupyterlab-throwaway
-    command: echo 
-
+    command: echo

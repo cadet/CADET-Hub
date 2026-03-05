@@ -8,4 +8,3 @@ RUN pip install --no-cache-dir --upgrade \
     oauthenticator==17.3.0 \
     jupyterhub-idle-culler==1.4.0 \
     jupyterhub-firstuseauthenticator==1.1.1
-

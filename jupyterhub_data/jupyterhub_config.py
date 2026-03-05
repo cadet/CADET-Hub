@@ -104,11 +104,11 @@ c.JupyterHub.services = [
             "-m",
             "jupyterhub_idle_culler",
             "--timeout=40000",
-
         ],
         # "admin": True,
     }
 ]
+
 
 def pre_spawn_hook(spawner):
     group_names = {group.name for group in spawner.user.groups}
@@ -116,6 +116,5 @@ def pre_spawn_hook(spawner):
         spawner.log.info(f"Enabling RTC for user {spawner.user.name}")
         spawner.args.append("--LabApp.collaborative=True")
 
+
 c.Spawner.pre_spawn_hook = pre_spawn_hook
-
-

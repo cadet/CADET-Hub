@@ -58,4 +58,3 @@ pkill -9 jupyter || true
 
 echo "Restarting Jupyter Notebook..."
 exec start-notebook.sh
-

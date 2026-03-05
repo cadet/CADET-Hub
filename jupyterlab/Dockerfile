@@ -55,11 +55,11 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
 #    fix-permissions "${CONDA_DIR}" && \
 #    fix-permissions "/home/${NB_USER}"
 #USER ${NB_UID}
- 
+
 RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@dev"
 
 #####################
-# CADET 4.4.0 
+# CADET 4.4.0
 #####################
 
 # name your environment and choose the python version
@@ -71,7 +71,7 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${old_cadet_env}" python=${
     'ipython' \
     'ipykernel' \
     'cadet==4.4.0' -c conda-forge && \
-    mamba clean --all -f -y 
+    mamba clean --all -f -y
 
 # alternatively, you can comment out the lines above and uncomment those below
 # if you'd prefer to use a YAML file present in the docker build context
@@ -89,8 +89,8 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${old_cadet_env}" python=${
 #    fix-permissions "${CONDA_DIR}" && \
 #    fix-permissions "/home/${NB_USER}"
 #USER ${NB_UID}
- 
-RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir cadet-python==0.14.1 cadet-process==0.9.1 
+
+RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir cadet-python==0.14.1 cadet-process==0.9.1
 
 ##################
 # PLANALYZE KERNEL
@@ -120,7 +120,7 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${planalyze_env}" python=${
 #USER ${NB_UID}
 
 RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install calibr8
- 
+
 # any additional pip installs can be added by uncommenting the following line
 # RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install --quiet --no-cache-dir
 
@@ -147,4 +147,3 @@ RUN "${CONDA_DIR}/envs/${planalyze_env}/bin/pip" install calibr8
 #            "$env/bin/python" -m ipykernel install --prefix="${CONDA_DIR}" --name "$env_name" --display-name "Python ($env_name)"; \
 #        fi; \
 #    done
-
