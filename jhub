@@ -4,6 +4,13 @@
 scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 cd $scriptDir
 
+# load environment variables from .env
+if [[ -f .env ]]; then
+  set -a
+  source .env
+  set +a
+fi
+
 fn_help(){
     echo "jhub: Script to manage docker-composed jupyterhub setup"
     echo "-----"
@@ -30,7 +37,7 @@ fn_nuke_user_data(){
     echo "Are you sure you want to NUKE USER DATA?"
     c 0         # Color End
 
-    USER_VOLUMES=$(docker volume ls -q -f "name=jupyterhub-user-")
+    USER_VOLUMES=$(docker volume ls -q -f "name=${JHUB_VOLUME_PREFIX}")
     echo -e "$USER_VOLUMES"
 
     read -rep "continue? [y/any]: " -i "n" okay
@@ -43,7 +50,7 @@ fn_nuke_user_data(){
 
 fn_backup_user_data(){
 
-    USER_VOLUMES=$(docker volume ls -q -f "name=jupyterhub-user-")
+    USER_VOLUMES=$(docker volume ls -q -f "name=${JHUB_VOLUME_PREFIX}")
     [ -z "$USER_VOLUMES" ] && echo "No user volumes found!" && exit
 
     for vol in $USER_VOLUMES; do

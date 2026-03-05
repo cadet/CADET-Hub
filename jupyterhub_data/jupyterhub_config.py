@@ -12,8 +12,8 @@ c.Spawner.default_url = "/lab"
 
 c.JupyterHub.authenticator_class = "firstuseauthenticator.FirstUseAuthenticator"
 
-c.Spawner.mem_limit = "32G"
-c.Spawner.cpu_limit = 8
+c.Spawner.mem_limit = "400G"
+c.Spawner.cpu_limit = 80
 
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 
@@ -110,12 +110,12 @@ c.JupyterHub.services = [
     }
 ]
 
-
 def pre_spawn_hook(spawner):
     group_names = {group.name for group in spawner.user.groups}
     if "collaborative" in group_names:
         spawner.log.info(f"Enabling RTC for user {spawner.user.name}")
         spawner.args.append("--LabApp.collaborative=True")
 
-
 c.Spawner.pre_spawn_hook = pre_spawn_hook
+
+

@@ -1,7 +1,7 @@
 # Docker-based JupyterHub
 IBG-1's JupyterHub is a multi-user Hub that spawns and manages JupyterLab instances within Docker containers, allowing the deployment of personalized programming environments.  
 IBG-1's JupyterHub is currently deployed on machine `IBT012`.  
-It can be accessed via `jupyter2.cadet-web.de` and `ibt012.ibt.kfa-juelich.de:8082` (from within the FZJ network)
+It can be accessed via `jupyter.cadet-web.de` and `ibt012.ibt.kfa-juelich.de:8082` (from within the FZJ network)
 
 ## Prerequisites for setup
 JupyterHub and the JupyterLab instances that it spawns are deployed as Docker applications.
