@@ -5,7 +5,7 @@ RUN rm -rf ${HOME}/work
 # RUN mamba install -c conda-forge "jupyterlab<4" jupyterlab-git jupyter-resource-usage ipywidgets ipykernel
 RUN mamba install -y -n base -c conda-forge \
     jupyter \
-    jupyterlab \
+    'jupyterlab=4.5' \
     jupytext \
     jupyterlab-myst \
     jupyter-resource-usage \
@@ -15,6 +15,7 @@ RUN mamba install -y -n base -c conda-forge \
     nbgitpuller \
     nb_conda_kernels \
     anywidget \
+    ipympl \
     && python -m pip install --no-cache-dir git-credential-helpers
 
 RUN jupyter server extension enable nb_conda_kernels
@@ -101,8 +102,11 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
 #    fix-permissions "/home/${NB_USER}"
 #USER ${NB_UID}
 
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@dev"
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@main"
+# Pinned to the commits of the CADET-Workshop environment.yml.
+ARG cadet_process_ref=a65245e3c0cae8d885a805162fc6ee21201f6eca
+ARG cadet_gui_ref=c73fd178066936354a9421925fab0b067f031c20
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@${cadet_process_ref}"
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@${cadet_gui_ref}"
 
 
 #####################
