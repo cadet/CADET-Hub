@@ -1,4 +1,13 @@
-/* Larger text while presenting with jupyterlab-slideshow. */
+/* jupyterlab-slideshow: larger text, slides start at the top and scroll when too tall. */
 body[data-jp-deck-mode='presenting'] .jp-NotebookPanel {
+  justify-content: flex-start !important;
+}
+
+body[data-jp-deck-mode='presenting'] .jp-NotebookPanel > .jp-Notebook {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+body[data-jp-deck-mode='presenting'] .jp-Notebook .jp-Cell {
   zoom: 150%;
 }
