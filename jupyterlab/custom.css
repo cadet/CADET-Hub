@@ -1,0 +1,4 @@
+/* Larger text while presenting with jupyterlab-slideshow. */
+body[data-jp-deck-mode='presenting'] .jp-NotebookPanel {
+  zoom: 150%;
+}

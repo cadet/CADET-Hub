@@ -8,6 +8,7 @@ RUN mamba install -y -n base -c conda-forge \
     'jupyterlab=4.5' \
     jupytext \
     jupyterlab-myst \
+    jupyterlab-slideshow \
     jupyter-resource-usage \
     ipywidgets \
     ipykernel \
@@ -20,6 +21,14 @@ RUN mamba install -y -n base -c conda-forge \
 
 RUN jupyter server extension enable nb_conda_kernels
 RUN jupyter labextension disable @jupyterlab/git
+
+# Larger text while presenting with jupyterlab-slideshow. JupyterLab looks for custom.css in
+# ~/.jupyter/custom (hidden by the home volume) and in jupyter_server's static/custom.
+COPY --chown=${NB_UID}:${NB_GID} custom.css /tmp/custom.css
+RUN custom_dir="$(python -c 'import jupyter_server, os; print(os.path.join(os.path.dirname(jupyter_server.__file__), "static", "custom"))')" && \
+    mkdir -p "${custom_dir}" && \
+    mv /tmp/custom.css "${custom_dir}/custom.css" && \
+    printf '%s\n' '{"LabApp": {"custom_css": true}}' > "${CONDA_DIR}/etc/jupyter/jupyter_lab_config.json"
 
 
 #####################
