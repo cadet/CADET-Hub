@@ -113,7 +113,7 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
 
 # Pinned to the commits of the CADET-Workshop environment.yml.
 ARG cadet_process_ref=a65245e3c0cae8d885a805162fc6ee21201f6eca
-ARG cadet_gui_ref=f9693718d003d0391a0dca5bcc3868b75de52d1d
+ARG cadet_gui_ref=289901c3993487d654c9223017315c01a54d1093
 RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@${cadet_process_ref}"
 RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@${cadet_gui_ref}"
 
