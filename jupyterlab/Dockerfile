@@ -1,11 +1,11 @@
-FROM quay.io/jupyter/scipy-notebook:lab-4.5.5
+FROM quay.io/jupyter/scipy-notebook:lab-4.6.4
 
 RUN rm -rf ${HOME}/work
 
 # RUN mamba install -c conda-forge "jupyterlab<4" jupyterlab-git jupyter-resource-usage ipywidgets ipykernel
 RUN mamba install -y -n base -c conda-forge \
     jupyter \
-    'jupyterlab=4.5' \
+    'jupyterlab=4.6' \
     jupytext \
     jupyterlab-myst \
     jupyterlab-slideshow \
