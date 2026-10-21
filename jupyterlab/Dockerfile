@@ -3,20 +3,23 @@ FROM quay.io/jupyter/scipy-notebook:lab-4.6.4
 RUN rm -rf ${HOME}/work
 
 # RUN mamba install -c conda-forge "jupyterlab<4" jupyterlab-git jupyter-resource-usage ipywidgets ipykernel
+# Frontend extensions pinned to the versions the workshop was tested with; the widget
+# frontends (jupyterlab_widgets, anywidget, ipympl) must match the kernel packages below.
 RUN mamba install -y -n base -c conda-forge \
     jupyter \
-    'jupyterlab=4.6' \
-    jupytext \
-    jupyterlab-myst \
-    jupyterlab-slideshow \
+    'jupyterlab=4.6.4' \
+    'jupytext=1.19.6' \
+    'jupyterlab-myst=2.7.0' \
+    'jupyterlab-slideshow=0.3.4' \
     jupyter-resource-usage \
-    ipywidgets \
+    'ipywidgets=8.1.9' \
+    'jupyterlab_widgets=3.0.17' \
     ipykernel \
     notebook \
     nbgitpuller \
     nb_conda_kernels \
-    anywidget \
-    ipympl \
+    'anywidget=0.11.0' \
+    'ipympl=0.10.0' \
     && python -m pip install --no-cache-dir git-credential-helpers
 
 RUN jupyter server extension enable nb_conda_kernels
@@ -39,31 +42,44 @@ COPY --chmod=0644 50-workshop-pull.sh /usr/local/bin/before-notebook.d/50-worksh
 # CADET WORKSHOP KERNEL
 #####################
 
-# The kernel for the CADET-Workshop notebooks. Packages and commits follow the workshop's
-# environment.yml (https://github.com/cadet/CADET-Workshop), so a rebuild does not change what
-# participants get. JupyterLab extensions (jupytext, myst, slideshow) are in base.
+# The kernel for the CADET-Workshop notebooks. Exact versions of the workshop's environment.yml
+# (https://github.com/cadet/CADET-Workshop), in which all notebooks were tested, so a rebuild does
+# not change what participants get. JupyterLab extensions (jupytext, myst, slideshow) are in base.
 ARG workshop_env=0_CADET_Workshop
-RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${workshop_env}" python=3.12 \
-    'ipython' \
-    'ipykernel' \
-    'ipympl' \
-    'ipywidgets' \
-    'anywidget' \
-    'joblib' \
-    'matplotlib' \
-    'numpy' \
-    'openpyxl' \
-    'pandas' \
-    'pathos' \
-    'scipy' \
-    'cadet==5.1.1' -c conda-forge && \
+RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${workshop_env}" -c conda-forge \
+    'python=3.12.15' \
+    'cadet=5.1.1' \
+    'anywidget=0.11.0' \
+    'h5py=3.16.0' \
+    'ipykernel=7.4.0' \
+    'ipympl=0.10.0' \
+    'ipywidgets=8.1.9' \
+    'joblib=1.6.0' \
+    'matplotlib-base=3.11.2' \
+    'numba=0.68.0' \
+    'numpy=2.2.6' \
+    'openpyxl=3.1.5' \
+    'pandas=2.3.3' \
+    'pathos=0.3.5' \
+    'psutil=7.2.2' \
+    'scipy=1.17.1' \
+    'traitlets=5.16.1' \
+    pip && \
     mamba clean --all -f -y
 
-ARG workshop_cadet_process_ref=a65245e3c0cae8d885a805162fc6ee21201f6eca
+# CADET-Process: tag workshop-2026 (dev a65245e plus the cyclic fractionation fix, PR #458).
+# CADET-GUI: tag workshop-2026. Commits instead of tag names, so a moved tag changes nothing.
+ARG workshop_cadet_process_ref=758eaebdf09af25358ba198020f8b9c0e7d6619b
 ARG workshop_cadet_gui_ref=289901c3993487d654c9223017315c01a54d1093
 RUN "${CONDA_DIR}/envs/${workshop_env}/bin/pip" install --quiet --no-cache-dir \
     "git+https://github.com/fau-advanced-separations/CADET-Process.git@${workshop_cadet_process_ref}" \
-    "git+https://github.com/cadet/CADET-GUI.git@${workshop_cadet_gui_ref}"
+    "git+https://github.com/cadet/CADET-GUI.git@${workshop_cadet_gui_ref}" \
+    'addict==2.3.0' \
+    'CADET-Python==1.3.0' \
+    'corner==2.3.0' \
+    'hopsy==1.7.0' \
+    'pipefunc==0.93.2' \
+    'pymoo==0.6.2'
 
 
 #####################
