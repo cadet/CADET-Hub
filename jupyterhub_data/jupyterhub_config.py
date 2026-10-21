@@ -119,8 +119,8 @@ c.JupyterHub.services = [
 def apply_workshop(spawner, group_name, workshop):
     """Set up the server of a workshop participant.
 
-    The teaching branch is cloned on the first start (`workshop-pull` in the JupyterLab image),
-    the solution is a read-only host clone, and resources are limited per participant.
+    The teaching and solution branches are cloned on the first start (`workshop-pull` in the
+    JupyterLab image), and resources are limited per participant.
     """
     spawner.log.info(f"Workshop {group_name} for user {spawner.user.name}")
     if "repository" in workshop:
@@ -129,13 +129,8 @@ def apply_workshop(spawner, group_name, workshop):
             "WORKSHOP_REPOSITORY": workshop["repository"],
             "WORKSHOP_BRANCH": workshop.get("branch", ""),
             "WORKSHOP_FOLDER": workshop.get("folder", ""),
-        }
-    if "solution" in workshop:
-        # Host path of a clone of the solution branch; mounted inside the home folder, read-only
-        target = f"{NOTEBOOK_DIR}/{workshop.get('solution_folder', 'solution')}"
-        spawner.volumes = {
-            **spawner.volumes,
-            workshop["solution"]: {"bind": target, "mode": "ro"},
+            "WORKSHOP_SOLUTION_BRANCH": workshop.get("solution_branch", ""),
+            "WORKSHOP_SOLUTION_FOLDER": workshop.get("solution_folder", ""),
         }
     if "image" in workshop:
         spawner.image = workshop["image"]

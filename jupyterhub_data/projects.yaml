@@ -28,16 +28,15 @@ projects:
       - h.lanzrath
       - r.jaepel
       - antonia.berger@rwth-aachen.de
-  # Workshop group: members get the workshop folder on their first server start, a read-only
-  # solution folder and limited resources (see README, Workshops). Remove the group afterwards.
+  # Workshop group: members get the teaching and solution folders on their first server start
+  # and limited resources (see README, Workshops). Remove the group afterwards.
   workshop_2026_users:
     members: []
     workshop:
       repository: https://github.com/cadet/CADET-Workshop
       branch: teaching
       folder: CADET-Workshop-2026-teaching
-      # Host clone of the solution branch (git clone -b solution ... on IBT012)
-      solution: /opt/cadet-workshop/CADET-Workshop-2026-solution
+      solution_branch: solution
       solution_folder: CADET-Workshop-2026-solution
       mem_limit: 16G
       cpu_limit: 4
