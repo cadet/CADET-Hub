@@ -118,7 +118,9 @@ A group in `projects.yaml` with a `workshop` entry is a workshop group. When a m
 | `mem_limit`, `cpu_limit` | Resources per participant, replacing the hub-wide limits. |
 | `image` | Optional: a separate JupyterLab image for the workshop, so its pinned packages do not affect other users. |
 
-Before the workshop, clone the solution branch on the host:
+Participants use the kernel `0_CADET_Workshop` (shown as *Python [conda env:0_CADET_Workshop]*). Its packages and the CADET-Process and CADET-GUI commits follow the workshop's `environment.yml`; update both together. The `2_CADET_GUI` kernel follows the current development versions and is not tied to the workshop.
+
+Before the workshop, clone the solution branch on the host as the user that runs the hub (the folder must exist before the first participant starts a server; otherwise Docker creates an empty folder owned by root):
 ```
 git clone -b solution https://github.com/cadet/CADET-Workshop /opt/cadet-workshop/CADET-Workshop-2026-solution
 ```

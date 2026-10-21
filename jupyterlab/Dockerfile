@@ -36,6 +36,37 @@ COPY --chmod=0644 50-workshop-pull.sh /usr/local/bin/before-notebook.d/50-worksh
 
 
 #####################
+# CADET WORKSHOP KERNEL
+#####################
+
+# The kernel for the CADET-Workshop notebooks. Packages and commits follow the workshop's
+# environment.yml (https://github.com/cadet/CADET-Workshop), so a rebuild does not change what
+# participants get. JupyterLab extensions (jupytext, myst, slideshow) are in base.
+ARG workshop_env=0_CADET_Workshop
+RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${workshop_env}" python=3.12 \
+    'ipython' \
+    'ipykernel' \
+    'ipympl' \
+    'ipywidgets' \
+    'anywidget' \
+    'joblib' \
+    'matplotlib' \
+    'numpy' \
+    'openpyxl' \
+    'pandas' \
+    'pathos' \
+    'scipy' \
+    'cadet==5.1.1' -c conda-forge && \
+    mamba clean --all -f -y
+
+ARG workshop_cadet_process_ref=a65245e3c0cae8d885a805162fc6ee21201f6eca
+ARG workshop_cadet_gui_ref=289901c3993487d654c9223017315c01a54d1093
+RUN "${CONDA_DIR}/envs/${workshop_env}/bin/pip" install --quiet --no-cache-dir \
+    "git+https://github.com/fau-advanced-separations/CADET-Process.git@${workshop_cadet_process_ref}" \
+    "git+https://github.com/cadet/CADET-GUI.git@${workshop_cadet_gui_ref}"
+
+
+#####################
 # CADET LATEST KERNEL
 #####################
 
@@ -115,11 +146,9 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
 #    fix-permissions "/home/${NB_USER}"
 #USER ${NB_UID}
 
-# Pinned to the commits of the CADET-Workshop environment.yml.
-ARG cadet_process_ref=a65245e3c0cae8d885a805162fc6ee21201f6eca
-ARG cadet_gui_ref=289901c3993487d654c9223017315c01a54d1093
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@${cadet_process_ref}"
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@${cadet_gui_ref}"
+# Current development versions for working with the GUI; the workshop has its own kernel above.
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@dev"
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@main"
 
 
 #####################
