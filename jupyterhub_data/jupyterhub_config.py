@@ -72,8 +72,14 @@ admin_users = project_config["projects"]["admin"]["members"]
 c.Authenticator.admin_users.update(admin_users)
 print("Add users with admin privilege.")
 
+# Workshop settings per group (optional `workshop` entry of a project), applied in pre_spawn_hook
+workshops = {}
+
 for project_name, project in project_config["projects"].items():
-    members = project.get("members", [])
+    members = project.get("members") or []
+    if "workshop" in project:
+        workshops[project_name] = project["workshop"]
+        print(f"Group {project_name} is a workshop group: {project['workshop']}")
     c.Authenticator.allowed_users.update(members)
     print(f"Adding {project_name} members: {members} to the list to allowed users.")
     c.JupyterHub.load_groups[project_name] = members
@@ -110,11 +116,49 @@ c.JupyterHub.services = [
 ]
 
 
+def apply_workshop(spawner, group_name, workshop):
+    """Set up the server of a workshop participant.
+
+    The teaching branch is cloned on the first start (`workshop-pull` in the JupyterLab image),
+    the solution is a read-only host clone, and resources are limited per participant.
+    """
+    spawner.log.info(f"Workshop {group_name} for user {spawner.user.name}")
+    if "repository" in workshop:
+        spawner.environment = {
+            **spawner.environment,
+            "WORKSHOP_REPOSITORY": workshop["repository"],
+            "WORKSHOP_BRANCH": workshop.get("branch", ""),
+            "WORKSHOP_FOLDER": workshop.get("folder", ""),
+        }
+    if "solution" in workshop:
+        # Host path of a clone of the solution branch; mounted inside the home folder, read-only
+        target = f"{NOTEBOOK_DIR}/{workshop.get('solution_folder', 'solution')}"
+        spawner.volumes = {
+            **spawner.volumes,
+            workshop["solution"]: {"bind": target, "mode": "ro"},
+        }
+    if "image" in workshop:
+        spawner.image = workshop["image"]
+    if "mem_limit" in workshop:
+        spawner.mem_limit = workshop["mem_limit"]
+    if "cpu_limit" in workshop:
+        spawner.cpu_limit = workshop["cpu_limit"]
+
+
 def pre_spawn_hook(spawner):
     group_names = {group.name for group in spawner.user.groups}
     if "collaborative" in group_names:
         spawner.log.info(f"Enabling RTC for user {spawner.user.name}")
         spawner.args.append("--LabApp.collaborative=True")
+
+    workshop_groups = sorted(group_names & workshops.keys())
+    if len(workshop_groups) > 1:
+        spawner.log.warning(
+            f"User {spawner.user.name} is in several workshop groups {workshop_groups}; "
+            f"using {workshop_groups[0]}"
+        )
+    if workshop_groups:
+        apply_workshop(spawner, workshop_groups[0], workshops[workshop_groups[0]])
 
 
 c.Spawner.pre_spawn_hook = pre_spawn_hook

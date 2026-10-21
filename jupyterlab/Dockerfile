@@ -30,6 +30,10 @@ RUN custom_dir="$(python -c 'import jupyter_server, os; print(os.path.join(os.pa
     mv /tmp/custom.css "${custom_dir}/custom.css" && \
     printf '%s\n' '{"LabApp": {"custom_css": true}}' > "${CONDA_DIR}/etc/jupyter/jupyter_lab_config.json"
 
+# Workshop groups: clone the workshop repository on the first server start (see projects.yaml).
+COPY --chmod=0755 workshop-pull /usr/local/bin/workshop-pull
+COPY --chmod=0644 50-workshop-pull.sh /usr/local/bin/before-notebook.d/50-workshop-pull.sh
+
 
 #####################
 # CADET LATEST KERNEL

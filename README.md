@@ -94,6 +94,43 @@ Alternatively, accounts can be added to the `collaborative` group via the admin 
 
 This current version of real-time collaboration requires password sharing. Of course, this is not acceptable for all users. In these cases, one will have to make do with screen sharing.
 
+### Workshops
+A group in `projects.yaml` with a `workshop` entry is a workshop group. When a member starts their server, the `pre_spawn_hook` in `jupyterhub_config.py` applies the settings of that entry:
+
+```
+  cadet-workshop-2026:
+    members: []
+    workshop:
+      repository: https://github.com/cadet/CADET-Workshop
+      branch: teaching                 # cloned into the home folder
+      folder: CADET-Workshop
+      solution: /opt/cadet-workshop/CADET-Workshop-solution   # host path
+      solution_folder: CADET-Workshop-solution                # read-only in the home folder
+      mem_limit: 16G
+      cpu_limit: 4
+      # image: jupyterlab_img:workshop-2026
+```
+
+| Key | Effect |
+|---|---|
+| `repository`, `branch`, `folder` | On the first server start, `workshop-pull` (in the JupyterLab image) clones the branch into `~/<folder>` with `gitpuller`. If the folder exists, nothing happens, so participants' changes are never merged on a restart. A failed clone is logged and does not stop the server. |
+| `solution`, `solution_folder` | A clone of the solution branch on the host, mounted read-only at `~/<solution_folder>`. Update it for everyone with `git pull` in the host clone. |
+| `mem_limit`, `cpu_limit` | Resources per participant, replacing the hub-wide limits. |
+| `image` | Optional: a separate JupyterLab image for the workshop, so its pinned packages do not affect other users. |
+
+Before the workshop, clone the solution branch on the host:
+```
+git clone -b solution https://github.com/cadet/CADET-Workshop /opt/cadet-workshop/CADET-Workshop-solution
+```
+
+Participants' commits stay in their own copy: `gitpuller` commits local changes in the clone in their home volume and never pushes.
+
+To give participants an updated notebook during the workshop, push the fix to the teaching branch and share an [nbgitpuller link](https://nbgitpuller.readthedocs.io/en/latest/link.html). A participant deletes the notebook and opens the link; nbgitpuller restores deleted files from the repository. Without deleting it, nbgitpuller merges with `-Xours`: lines both sides changed keep the participant's version, so a fix in an executed notebook may arrive only partly.
+
+The solution folder is read-only: notebooks there can be read and run, but not saved, and an optimization run fails when it writes its results folder next to the notebook. To run such a notebook, copy it into the workshop folder first.
+
+After the workshop, remove the group from `projects.yaml` (members keep their home volumes).
+
 
 ## Configuring JupyterLab
 

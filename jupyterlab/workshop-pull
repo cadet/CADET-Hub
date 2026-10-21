@@ -1,0 +1,23 @@
+#!/bin/bash
+# Clone the workshop repository into the home folder of a workshop user.
+#
+# The hub's pre_spawn_hook sets WORKSHOP_REPOSITORY, WORKSHOP_BRANCH and WORKSHOP_FOLDER for
+# members of a workshop group (see projects.yaml). Without them, nothing happens.
+#
+# The repository is only cloned if the folder does not exist yet. Participants' own changes are
+# never merged with upstream on server start; to update a notebook, they delete it and open the
+# nbgitpuller link, which restores it from the repository.
+
+if [ -z "${WORKSHOP_REPOSITORY:-}" ]; then
+    exit 0
+fi
+
+target="${HOME}/${WORKSHOP_FOLDER:-$(basename "${WORKSHOP_REPOSITORY}" .git)}"
+
+if [ -e "${target}" ]; then
+    echo "workshop-pull: ${target} exists, not cloning again."
+    exit 0
+fi
+
+echo "workshop-pull: cloning ${WORKSHOP_REPOSITORY} (${WORKSHOP_BRANCH:-default branch}) into ${target}."
+cd "${HOME}" && timeout 300 gitpuller "${WORKSHOP_REPOSITORY}" ${WORKSHOP_BRANCH:+"${WORKSHOP_BRANCH}"} "${target}"
