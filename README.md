@@ -98,14 +98,14 @@ This current version of real-time collaboration requires password sharing. Of co
 A group in `projects.yaml` with a `workshop` entry is a workshop group. When a member starts their server, the `pre_spawn_hook` in `jupyterhub_config.py` applies the settings of that entry:
 
 ```
-  cadet-workshop-2026:
+  workshop_2026_users:
     members: []
     workshop:
       repository: https://github.com/cadet/CADET-Workshop
       branch: teaching                 # cloned into the home folder
-      folder: CADET-Workshop
-      solution: /opt/cadet-workshop/CADET-Workshop-solution   # host path
-      solution_folder: CADET-Workshop-solution                # read-only in the home folder
+      folder: CADET-Workshop-2026-teaching
+      solution: /opt/cadet-workshop/CADET-Workshop-2026-solution   # host path
+      solution_folder: CADET-Workshop-2026-solution                # read-only in the home folder
       mem_limit: 16G
       cpu_limit: 4
       # image: jupyterlab_img:workshop-2026
@@ -120,7 +120,7 @@ A group in `projects.yaml` with a `workshop` entry is a workshop group. When a m
 
 Before the workshop, clone the solution branch on the host:
 ```
-git clone -b solution https://github.com/cadet/CADET-Workshop /opt/cadet-workshop/CADET-Workshop-solution
+git clone -b solution https://github.com/cadet/CADET-Workshop /opt/cadet-workshop/CADET-Workshop-2026-solution
 ```
 
 Participants' commits stay in their own copy: `gitpuller` commits local changes in the clone in their home volume and never pushes.
