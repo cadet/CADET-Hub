@@ -163,9 +163,10 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${cadet_env}" python=${cade
 #    fix-permissions "/home/${NB_USER}"
 #USER ${NB_UID}
 
-# Current development versions for working with the GUI; the workshop has its own kernel above.
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/fau-advanced-separations/CADET-Process.git@dev"
-RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir "git+https://github.com/cadet/CADET-GUI.git@main"
+# The same CADET-Process and CADET-GUI commits as the workshop kernel above.
+RUN "${CONDA_DIR}/envs/${cadet_env}/bin/pip" install --quiet --no-cache-dir \
+    "git+https://github.com/fau-advanced-separations/CADET-Process.git@${workshop_cadet_process_ref}" \
+    "git+https://github.com/cadet/CADET-GUI.git@${workshop_cadet_gui_ref}"
 
 
 #####################
