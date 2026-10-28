@@ -244,3 +244,8 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${old_cadet_env}" python=${
 
 RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir cadet-python==0.14.1 cadet-process==0.9.1
 
+
+# Workshop groups: copy the workshop material from the read-only host mount on the first server
+# start (see projects.yaml). At the end of the file so changing it does not rebuild the kernels.
+COPY --chmod=0755 workshop-material /usr/local/bin/workshop-material
+COPY --chmod=0644 55-workshop-material.sh /usr/local/bin/before-notebook.d/55-workshop-material.sh

@@ -119,8 +119,9 @@ c.JupyterHub.services = [
 def apply_workshop(spawner, group_name, workshop):
     """Set up the server of a workshop participant.
 
-    The teaching and solution branches are cloned on the first start (`workshop-pull` in the
-    JupyterLab image), and resources are limited per participant.
+    The teaching and solution branches are cloned (`workshop-pull` in the JupyterLab image) and
+    the material folder is copied (`workshop-material`) on the first start, and resources are
+    limited per participant.
     """
     spawner.log.info(f"Workshop {group_name} for user {spawner.user.name}")
     if "repository" in workshop:
@@ -131,6 +132,16 @@ def apply_workshop(spawner, group_name, workshop):
             "WORKSHOP_FOLDER": workshop.get("folder", ""),
             "WORKSHOP_SOLUTION_BRANCH": workshop.get("solution_branch", ""),
             "WORKSHOP_SOLUTION_FOLDER": workshop.get("solution_folder", ""),
+        }
+    if "material" in workshop:
+        # Host folder, mounted read-only outside the home folder; `workshop-material` copies it
+        # into the home folder on the first start
+        source = "/opt/workshop-material"
+        spawner.volumes = {**spawner.volumes, workshop["material"]: {"bind": source, "mode": "ro"}}
+        spawner.environment = {
+            **spawner.environment,
+            "WORKSHOP_MATERIAL_SOURCE": source,
+            "WORKSHOP_MATERIAL_FOLDER": workshop.get("material_folder", ""),
         }
     if "image" in workshop:
         spawner.image = workshop["image"]

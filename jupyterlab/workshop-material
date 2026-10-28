@@ -1,0 +1,23 @@
+#!/bin/bash
+# Copy the workshop material into the home folder of a workshop user.
+#
+# For members of a workshop group with a `material` entry (see projects.yaml), the hub mounts the
+# host folder read-only at WORKSHOP_MATERIAL_SOURCE and sets WORKSHOP_MATERIAL_FOLDER. Without
+# them, nothing happens.
+#
+# The material is only copied if the folder does not exist yet, so participants' own changes are
+# kept on a restart. To get the current material, a participant renames or deletes the folder
+# and restarts the server.
+
+if [ -z "${WORKSHOP_MATERIAL_SOURCE:-}" ]; then
+    exit 0
+fi
+
+target="${HOME}/${WORKSHOP_MATERIAL_FOLDER:-material}"
+if [ -e "${target}" ]; then
+    echo "workshop-material: ${target} exists, not copying again."
+    exit 0
+fi
+echo "workshop-material: copying ${WORKSHOP_MATERIAL_SOURCE} into ${target}."
+# The copies belong to the participant and must be writable, whatever the host permissions are.
+mkdir -p "${target}" && cp -r "${WORKSHOP_MATERIAL_SOURCE}/." "${target}/" && chmod -R u+w "${target}"

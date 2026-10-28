@@ -41,3 +41,18 @@ projects:
       mem_limit: 16G
       cpu_limit: 4
       # image: jupyterlab_img:workshop-2026
+  # Workshop group: members get the CADET workshop folders and their own copy of a host folder
+  # on their first server start (see README, Workshops). The Biogentle material is not published
+  # anywhere. Members must not also be in workshop_2026_users. Remove the group afterwards.
+  biogentle_users:
+    members: []
+    workshop:
+      repository: https://github.com/cadet/CADET-Workshop
+      branch: teaching
+      folder: CADET-Workshop-2026-teaching
+      solution_branch: solution
+      solution_folder: CADET-Workshop-2026-solution
+      material: /srv/biogentle
+      material_folder: Biogentle
+      mem_limit: 16G
+      cpu_limit: 4
