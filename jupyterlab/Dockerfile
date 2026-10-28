@@ -68,9 +68,10 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${workshop_env}" -c conda-f
     mamba clean --all -f -y
 
 # CADET-Process: tag workshop-2026 (dev a65245e plus the cyclic fractionation fix, PR #458).
-# CADET-GUI: tag workshop-2026. Commits instead of tag names, so a moved tag changes nothing.
+# CADET-GUI: tag workshop-2026 plus following the notebook's light/dark theme.
+# Commits instead of tag names, so a moved tag changes nothing.
 ARG workshop_cadet_process_ref=758eaebdf09af25358ba198020f8b9c0e7d6619b
-ARG workshop_cadet_gui_ref=289901c3993487d654c9223017315c01a54d1093
+ARG workshop_cadet_gui_ref=bb5539ea8610a64d678f6339bc7eb388c637e7a2
 RUN "${CONDA_DIR}/envs/${workshop_env}/bin/pip" install --quiet --no-cache-dir \
     "git+https://github.com/fau-advanced-separations/CADET-Process.git@${workshop_cadet_process_ref}" \
     "git+https://github.com/cadet/CADET-GUI.git@${workshop_cadet_gui_ref}" \
