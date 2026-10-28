@@ -115,11 +115,11 @@ A group in `projects.yaml` with a `workshop` entry is a workshop group. When a m
 |---|---|
 | `repository`, `branch`, `folder` | On the first server start, `workshop-pull` (in the JupyterLab image) clones the branch into `~/<folder>` with `gitpuller`. If the folder exists, nothing happens, so participants' changes are never merged on a restart. A failed clone is logged and does not stop the server. |
 | `solution_branch`, `solution_folder` | Optional: a second branch, cloned the same way into `~/<solution_folder>`. Each participant gets their own, editable copy. |
-| `material`, `material_folder` | Optional, instead of or in addition to `repository`: an absolute path to a folder on the hub host, for material that must not be published in a repository. It is mounted read-only at `/opt/workshop-material`, and on the first server start `workshop-material` (in the JupyterLab image) copies it into `~/<material_folder>`, an editable copy per participant. If the folder exists, nothing happens. The host folder and all folders above it must be readable by others, since the servers run as a different user. |
+| `material`, `material_folder` | Optional, instead of or in addition to `repository`: an absolute path to a folder on the hub host, for material that is not in a git repository. It is mounted read-only at `/opt/workshop-material`, and on the first server start `workshop-material` (in the JupyterLab image) copies it into `~/<material_folder>`, an editable copy per participant. If the folder exists, nothing happens. The host folder and all folders above it must be readable by others, since the servers run as a different user. |
 | `mem_limit`, `cpu_limit` | Resources per participant, replacing the hub-wide limits. |
 | `image` | Optional: a separate JupyterLab image for the workshop, so its pinned packages do not affect other users. |
 
-Participants use the kernel `0_CADET_Workshop` (shown as *Python [conda env:0_CADET_Workshop]*). Its packages and the CADET-Process and CADET-GUI commits follow the workshop's `environment.yml`; update both together. The `2_CADET_GUI` kernel follows the current development versions and is not tied to the workshop.
+Participants use the kernel `0_CADET_Workshop` (shown as *Python [conda env:0_CADET_Workshop]*). Its packages and the CADET-Process and CADET-GUI commits follow the workshop's `environment.yml`; update both together. The `2_CADET_GUI` kernel uses the same CADET-Process and CADET-GUI commits; `1_CADET_5.1.1_LATEST` follows CADET-Process `dev`.
 
 Participants' commits stay in their own copy: `gitpuller` commits local changes in the clone in their home volume and never pushes.
 
