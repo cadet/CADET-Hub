@@ -24,14 +24,6 @@ RUN mamba install -y -n base -c conda-forge \
 RUN jupyter server extension enable nb_conda_kernels
 RUN jupyter labextension disable @jupyterlab/git
 
-# Larger text while presenting with jupyterlab-slideshow. JupyterLab looks for custom.css in
-# ~/.jupyter/custom (hidden by the home volume) and in jupyter_server's static/custom.
-COPY --chown=${NB_UID}:${NB_GID} custom.css /tmp/custom.css
-RUN custom_dir="$(python -c 'import jupyter_server, os; print(os.path.join(os.path.dirname(jupyter_server.__file__), "static", "custom"))')" && \
-    mkdir -p "${custom_dir}" && \
-    mv /tmp/custom.css "${custom_dir}/custom.css" && \
-    printf '%s\n' '{"LabApp": {"custom_css": true}}' > "${CONDA_DIR}/etc/jupyter/jupyter_lab_config.json"
-
 # Workshop groups: clone the workshop repository on the first server start (see projects.yaml).
 COPY --chmod=0755 workshop-pull /usr/local/bin/workshop-pull
 COPY --chmod=0644 50-workshop-pull.sh /usr/local/bin/before-notebook.d/50-workshop-pull.sh
@@ -157,3 +149,12 @@ RUN mamba install -y -n base -c conda-forge \
 COPY --chmod=0755 workshop-update /usr/local/bin/workshop-update
 # Without --chmod, which would also apply to the created folder and make the files unreadable
 COPY jp_app_launcher_workshop.yml cadet-icon.svg /opt/workshop-launcher/
+
+# Larger text while presenting with jupyterlab-slideshow; the CADET-Workshop section first in the
+# Launcher. At the end of the file so changing it does not rebuild the kernels. JupyterLab looks for
+# custom.css in ~/.jupyter/custom (hidden by the home volume) and in jupyter_server's static/custom.
+COPY --chown=${NB_UID}:${NB_GID} custom.css /tmp/custom.css
+RUN custom_dir="$(python -c 'import jupyter_server, os; print(os.path.join(os.path.dirname(jupyter_server.__file__), "static", "custom"))')" && \
+    mkdir -p "${custom_dir}" && \
+    mv /tmp/custom.css "${custom_dir}/custom.css" && \
+    printf '%s\n' '{"LabApp": {"custom_css": true}}' > "${CONDA_DIR}/etc/jupyter/jupyter_lab_config.json"
