@@ -119,7 +119,7 @@ A group in `projects.yaml` with a `workshop` entry is a workshop group. When a m
 | `mem_limit`, `cpu_limit` | Resources per participant, replacing the hub-wide limits. |
 | `image` | Optional: a separate JupyterLab image for the workshop, so its pinned packages do not affect other users. |
 
-Participants use the kernel `0_CADET_Workshop` (shown as *Python [conda env:0_CADET_Workshop]*). Its packages and the CADET-Process and CADET-GUI commits follow the workshop's `environment.yml`; update both together. The `2_CADET_GUI` kernel uses the same CADET-Process and CADET-GUI commits; `1_CADET_5.1.1_LATEST` follows CADET-Process `dev`.
+Participants use the kernel `0_CADET_Workshop` (shown as *Python [conda env:0_CADET_Workshop]*). Its packages and the CADET-Process and CADET-GUI commits follow the workshop's `environment.yml`; update both together. `1_CADET_5.1.1_LATEST` follows CADET-Process `dev`; `3_CADET_5.1.0` and `4_CADET_4.4.0` are kept for older workshops.
 
 Participants' commits stay in their own copy: `gitpuller` commits local changes in the clone in their home volume and never pushes.
 
