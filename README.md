@@ -125,6 +125,8 @@ Participants' commits stay in their own copy: `gitpuller` commits local changes 
 
 To give participants an updated notebook during the workshop, push the fix to the teaching (or solution) branch and share an [nbgitpuller link](https://nbgitpuller.readthedocs.io/en/latest/link.html). A participant deletes the notebook and opens the link; nbgitpuller restores deleted files from the repository. Without deleting it, nbgitpuller merges with `-Xours`: lines both sides changed keep the participant's version, so a fix in an executed notebook may arrive only partly.
 
+To replace a whole workshop folder with a fresh copy, participants click **Update workshop** in the *Workshop* section of the JupyterLab Launcher (shown to workshop groups with a `repository` only). It opens a terminal running `workshop-update`, which asks for each workshop folder whether to archive it (rename it to `<folder>_archive_<date>_<time>`, the default), overwrite it (delete it, after typing `yes`) or skip it, and then runs `workshop-pull`, which clones every folder that no longer exists. Participants should close the notebooks from the workshop folders first; open notebooks keep pointing to the old files.
+
 To give participants updated material, replace the files in the host folder; a participant renames or deletes their folder and restarts the server to get a new copy.
 
 After the workshop, remove the group from `projects.yaml` (members keep their home volumes).

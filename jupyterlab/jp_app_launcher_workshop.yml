@@ -1,0 +1,7 @@
+# "Update workshop" card in the JupyterLab Launcher (jupyter_app_launcher). The hub points
+# JUPYTER_APP_LAUNCHER_PATH at this file's folder for workshop groups only (see projects.yaml).
+- title: Update workshop
+  description: Download a fresh copy of the workshop files; archive or overwrite your current copy.
+  type: terminal
+  source: workshop-update
+  catalog: Workshop

@@ -120,8 +120,8 @@ def apply_workshop(spawner, group_name, workshop):
     """Set up the server of a workshop participant.
 
     The teaching and solution branches are cloned (`workshop-pull` in the JupyterLab image) and
-    the material folder is copied (`workshop-material`) on the first start, and resources are
-    limited per participant.
+    the material folder is copied (`workshop-material`) on the first start, the Launcher shows an
+    "Update workshop" card (`workshop-update`), and resources are limited per participant.
     """
     spawner.log.info(f"Workshop {group_name} for user {spawner.user.name}")
     if "repository" in workshop:
@@ -132,6 +132,8 @@ def apply_workshop(spawner, group_name, workshop):
             "WORKSHOP_FOLDER": workshop.get("folder", ""),
             "WORKSHOP_SOLUTION_BRANCH": workshop.get("solution_branch", ""),
             "WORKSHOP_SOLUTION_FOLDER": workshop.get("solution_folder", ""),
+            # "Update workshop" card in the Launcher (`workshop-update`)
+            "JUPYTER_APP_LAUNCHER_PATH": "/opt/workshop-launcher",
         }
     if "material" in workshop:
         # Host folder, mounted read-only outside the home folder; `workshop-material` copies it

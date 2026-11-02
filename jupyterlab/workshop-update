@@ -1,0 +1,67 @@
+#!/bin/bash
+# Get a fresh copy of the workshop folders; started from the "Update workshop" launcher card.
+#
+# For each workshop folder (teaching, then solution) the participant chooses to archive it
+# (rename it to <folder>_archive_<date>_<time>), overwrite it (delete it) or skip it.
+# `workshop-pull` then clones every folder that no longer exists.
+
+if [ -z "${WORKSHOP_REPOSITORY:-}" ]; then
+    echo "workshop-update: this server is not set up for a workshop, nothing to update."
+    exit 0
+fi
+
+folders=("${WORKSHOP_FOLDER:-$(basename "${WORKSHOP_REPOSITORY}" .git)}")
+if [ -n "${WORKSHOP_SOLUTION_BRANCH:-}" ]; then
+    folders+=("${WORKSHOP_SOLUTION_FOLDER:-solution}")
+fi
+
+echo "Update the workshop files"
+echo
+echo "Save your work and close all notebooks from the workshop folders before you continue;"
+echo "notebooks left open still point to the old files."
+echo
+
+for folder in "${folders[@]}"; do
+    target="${HOME}/${folder}"
+    if [ ! -e "${target}" ]; then
+        echo "${folder}: not in your home folder, a fresh copy is downloaded."
+        continue
+    fi
+    while true; do
+        read -r -p "${folder}: [a]rchive, [o]verwrite or [s]kip? [A/o/s] " answer
+        case "${answer,,}" in
+            "" | a | archive)
+                archive="${target}_archive_$(date +%Y-%m-%d_%H%M)"
+                # A second update within the same minute
+                [ -e "${archive}" ] && archive="${target}_archive_$(date +%Y-%m-%d_%H%M%S)"
+                mv "${target}" "${archive}" && echo "  Archived as ${archive##*/}."
+                break
+                ;;
+            o | overwrite)
+                read -r -p "  This deletes ${folder} with all your changes. Type 'yes' to confirm: " confirm
+                if [ "${confirm}" = "yes" ]; then
+                    rm -rf "${target}" && echo "  Deleted."
+                    break
+                fi
+                echo "  Not deleted."
+                ;;
+            s | skip)
+                echo "  Kept."
+                break
+                ;;
+            *)
+                echo "  Please answer a, o or s."
+                ;;
+        esac
+    done
+done
+
+echo
+if workshop-pull; then
+    echo
+    echo "Done. You can close this terminal."
+else
+    echo
+    echo "Downloading failed. Your archived folders are unchanged; run 'workshop-update' to try again."
+    exit 1
+fi
