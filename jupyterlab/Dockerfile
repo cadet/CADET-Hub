@@ -155,4 +155,5 @@ RUN mamba install -y -n base -c conda-forge \
     'jupyter_app_launcher=0.3.2' \
     && mamba clean --all -f -y
 COPY --chmod=0755 workshop-update /usr/local/bin/workshop-update
-COPY --chmod=0644 jp_app_launcher_workshop.yml /opt/workshop-launcher/jp_app_launcher_workshop.yml
+# Without --chmod, which would also apply to the created folder and make the file unreadable
+COPY jp_app_launcher_workshop.yml /opt/workshop-launcher/jp_app_launcher_workshop.yml
