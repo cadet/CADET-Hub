@@ -4,6 +4,6 @@
   description: Download a fresh copy of the workshop files; archive or overwrite your current copy.
   type: terminal
   source: workshop-update
-  catalog: Workshop
-  # Instead of the initials of the title ("UW")
-  icon: workshop-launcher-icon.svg
+  catalog: CADET-Workshop
+  # Also the icon of the section heading, which the Launcher takes from its first card
+  icon: cadet-icon.svg

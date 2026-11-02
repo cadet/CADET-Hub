@@ -11,3 +11,17 @@ body[data-jp-deck-mode='presenting'] .jp-NotebookPanel > .jp-Notebook {
 body[data-jp-deck-mode='presenting'] .jp-Notebook .jp-Cell {
   zoom: 150%;
 }
+
+/* Launcher: the CADET-Workshop section (Update workshop card) first, below the folder path. */
+.jp-Launcher-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.jp-Launcher-cwd {
+  order: -2;
+}
+
+.jp-Launcher-section:has(.jp-LauncherCard[data-category='CADET-Workshop']) {
+  order: -1;
+}

@@ -156,4 +156,4 @@ RUN mamba install -y -n base -c conda-forge \
     && mamba clean --all -f -y
 COPY --chmod=0755 workshop-update /usr/local/bin/workshop-update
 # Without --chmod, which would also apply to the created folder and make the files unreadable
-COPY jp_app_launcher_workshop.yml workshop-launcher-icon.svg /opt/workshop-launcher/
+COPY jp_app_launcher_workshop.yml cadet-icon.svg /opt/workshop-launcher/
