@@ -1,5 +1,5 @@
 #!/bin/bash
-# Get a fresh copy of the workshop folders; started from the "Update workshop" launcher card.
+# Get a fresh copy of the workshop folders; started from the "Update workshop files" launcher card.
 #
 # For each workshop folder (teaching, then solution) the participant chooses to archive it
 # (rename it to <folder>_archive_<date>_<time>), overwrite it (delete it) or skip it.

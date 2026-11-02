@@ -8,8 +8,8 @@
 # Each branch is only cloned if its folder does not exist yet. Participants' own changes are
 # never merged with upstream on server start. To update a notebook, they delete it and open the
 # nbgitpuller link, which restores it from the repository; to update a whole folder, they use the
-# "Update workshop" launcher card (`workshop-update`), which archives or deletes it and runs this
-# script again.
+# "Update workshop files" launcher card (`workshop-update`), which archives or deletes it and runs
+# this script again.
 
 if [ -z "${WORKSHOP_REPOSITORY:-}" ]; then
     exit 0

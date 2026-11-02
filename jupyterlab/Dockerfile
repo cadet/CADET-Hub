@@ -139,9 +139,9 @@ RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir 
 COPY --chmod=0755 workshop-material /usr/local/bin/workshop-material
 COPY --chmod=0644 55-workshop-material.sh /usr/local/bin/before-notebook.d/55-workshop-material.sh
 
-# Workshop groups: "Update workshop" card in the Launcher, which archives or deletes the workshop
-# folders and clones them again (see projects.yaml). JupyterLab is pinned again so the install
-# cannot move it.
+# Workshop groups: "Update workshop files" card in the Launcher, which archives or deletes the
+# workshop folders and clones them again (see projects.yaml). JupyterLab is pinned again so the
+# install cannot move it.
 RUN mamba install -y -n base -c conda-forge \
     'jupyterlab=4.6.4' \
     'jupyter_app_launcher=0.3.2' \

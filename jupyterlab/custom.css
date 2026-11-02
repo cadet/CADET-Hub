@@ -12,7 +12,8 @@ body[data-jp-deck-mode='presenting'] .jp-Notebook .jp-Cell {
   zoom: 150%;
 }
 
-/* Launcher: the CADET-Workshop section (Update workshop card) first, below the folder path. */
+/* Launcher: the CADET-Workshop section ("Update workshop files" card) first, below the folder
+   path. */
 .jp-Launcher-content {
   display: flex;
   flex-direction: column;
