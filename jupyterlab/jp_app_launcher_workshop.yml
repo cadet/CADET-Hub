@@ -5,3 +5,5 @@
   type: terminal
   source: workshop-update
   catalog: Workshop
+  # Instead of the initials of the title ("UW")
+  icon: workshop-launcher-icon.svg
