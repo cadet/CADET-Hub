@@ -134,6 +134,43 @@ RUN mamba create --quiet --yes -p "${CONDA_DIR}/envs/${old_cadet_env}" python=${
 RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir cadet-python==0.14.1 cadet-process==0.9.1
 
 
+#####################
+# CADET WORKSHOP NUMERICS KERNEL
+#####################
+
+ARG numerics_env=cadet-workshop-numerics
+
+RUN mamba create --quiet --yes \
+    -p "${CONDA_DIR}/envs/${numerics_env}" \
+    -c conda-forge/label/cadet-core_dev \
+    -c conda-forge \
+    'cadet=6.0.0a5' \
+    'python=3.14' \
+    'ipykernel' \
+    'pip' && \
+    mamba clean --all -f -y
+
+RUN "${CONDA_DIR}/envs/${numerics_env}/bin/python" -m pip install --no-cache-dir \
+    'addict==2.4.0' \
+    'cadet-python==1.3.0' \
+    'contourpy==1.4.0' \
+    'cycler==0.12.1' \
+    'filelock==4.2.8' \
+    'fonttools==4.68.0' \
+    'h5py==3.16.0' \
+    'ipywidgets==8.1.9' \
+    'jupyterlab-widgets==3.0.17' \
+    'kiwisolver==1.5.1' \
+    'matplotlib==3.11.2' \
+    'numpy==2.5.4' \
+    'pandas==3.1.0' \
+    'pillow==13.0.0' \
+    'pyparsing==3.3.3' \
+    'scipy==1.18.1' \
+    'widgetsnbextension==4.0.16' && \
+    "${CONDA_DIR}/envs/${numerics_env}/bin/python" -m pip check
+
+
 # Workshop groups: copy the workshop material from the read-only host mount on the first server
 # start (see projects.yaml). At the end of the file so changing it does not rebuild the kernels.
 COPY --chmod=0755 workshop-material /usr/local/bin/workshop-material
