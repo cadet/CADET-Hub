@@ -140,7 +140,9 @@ RUN "${CONDA_DIR}/envs/${old_cadet_env}/bin/pip" install --quiet --no-cache-dir 
 
 ARG numerics_env=cadet-workshop-numerics
 
-RUN mamba create --quiet --yes \
+# conda instead of mamba: mamba 2.10 (base image) aborts with std::bad_alloc when it falls back
+# to flat repodata for the cadet-core_dev label channel.
+RUN conda create --quiet --yes \
     -p "${CONDA_DIR}/envs/${numerics_env}" \
     -c conda-forge/label/cadet-core_dev \
     -c conda-forge \
@@ -154,7 +156,7 @@ RUN "${CONDA_DIR}/envs/${numerics_env}/bin/python" -m pip install --no-cache-dir
     'addict==2.4.0' \
     'cadet-python==1.3.0' \
     'contourpy==1.4.0' \
-    'cycler==0.12.1' \ 
+    'cycler==0.12.1' \
     'filelock==4.2.8' \
     'fonttools==4.68.0' \
     'h5py==3.16.0' \
