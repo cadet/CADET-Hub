@@ -154,7 +154,7 @@ RUN "${CONDA_DIR}/envs/${numerics_env}/bin/python" -m pip install --no-cache-dir
     'addict==2.4.0' \
     'cadet-python==1.3.0' \
     'contourpy==1.4.0' \
-    'cycler==0.12.1' \
+    'cycler==0.12.1
     'filelock==4.2.8' \
     'fonttools==4.68.0' \
     'h5py==3.16.0' \
